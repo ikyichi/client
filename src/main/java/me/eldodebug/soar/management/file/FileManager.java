@@ -12,6 +12,7 @@ public class FileManager {
 
 	private File glideDir, profileDir, cacheDir, screenshotDir, soarDir, customCapeDir, capeCacheDir;
 	private boolean migrationSuccess = false;
+	private File musicDir;
 	
 	public FileManager() {
 		
@@ -19,6 +20,7 @@ public class FileManager {
 		soarDir = new File(Minecraft.getMinecraft().mcDataDir, "soar");
 		profileDir = new File(glideDir, "profile");
 		cacheDir = new File(glideDir, "cache");
+		musicDir = new File(soarDir, "music");
 		screenshotDir = new File(glideDir, "screenshots");
 		customCapeDir = new File(cacheDir, "custom-cape");
 		capeCacheDir = new File(cacheDir, "cape");
@@ -36,6 +38,7 @@ public class FileManager {
 
 			if(!profileDir.exists()) createDir(profileDir);
 			if(!cacheDir.exists()) createDir(cacheDir);
+			if(!musicDir.exists()) createDir(musicDir);
 			if(!screenshotDir.exists()) createDir(screenshotDir);
 			if(!customCapeDir.exists()) createDir(customCapeDir);
 			if(!capeCacheDir.exists()) createDir(capeCacheDir);
@@ -92,4 +95,7 @@ public class FileManager {
 		return capeCacheDir;
 	}
 
+	public File getMusicDir() {
+		return musicDir;
+	}
 }

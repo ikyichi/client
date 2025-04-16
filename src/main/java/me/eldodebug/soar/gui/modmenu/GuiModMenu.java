@@ -62,7 +62,7 @@ public class GuiModMenu extends GuiScreen {
 		categories.add(new HomeCategory(this));
 		categories.add(new ModuleCategory(this));
 		categories.add(new CosmeticsCategory(this));
-		categories.add(new GamesCategory(this));
+		categories.add(new SpotifyCategory(this));
 		categories.add(new ProfileCategory(this));
 		categories.add(new ScreenshotCategory(this));
 		categories.add(new SettingCategory(this));

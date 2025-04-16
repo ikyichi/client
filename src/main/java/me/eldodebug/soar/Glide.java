@@ -7,6 +7,8 @@ import me.eldodebug.soar.gui.mainmenu.GuiGlideMainMenu;
 import me.eldodebug.soar.gui.modmenu.GuiModMenu;
 import me.eldodebug.soar.management.mods.RestrictedMod;
 import me.eldodebug.soar.management.remote.blacklists.BlacklistManager;
+import me.eldodebug.soar.management.music.MusicManager;
+import me.eldodebug.soar.management.music.RomanizationManager;
 import me.eldodebug.soar.management.remote.discord.DiscordStats;
 import me.eldodebug.soar.management.remote.news.NewsManager;
 import me.eldodebug.soar.management.remote.update.Update;
@@ -57,6 +59,7 @@ public class Glide {
 	private ScreenshotManager screenshotManager;
 	private NotificationManager notificationManager;
 	private SecurityFeatureManager securityFeatureManager;
+	private MusicManager musicManager;
 	private QuickPlayManager quickPlayManager;
 	private ChangelogManager changelogManager;
 	private NewsManager newsManager;
@@ -70,6 +73,7 @@ public class Glide {
 	private ClickEffects clickEffects;
 	private BlacklistManager blacklistManager;
 	private RestrictedMod restrictedMod;
+	private RomanizationManager romanizationManager;
 	
 	public Glide() {
 		name = "Glide";
@@ -112,6 +116,8 @@ public class Glide {
 		update = new Update();
 		update.check();
 		waypointManager = new WaypointManager();
+		musicManager = new MusicManager(fileManager);
+		romanizationManager = new RomanizationManager();
 
 		eventManager.register(new GlideHandler());
 
@@ -124,6 +130,9 @@ public class Glide {
 		profileManager.save();
 		Sound.play("soar/audio/close.wav", true);
 
+		if (romanizationManager != null) {
+			romanizationManager.shutdown();
+		}
 	}
 	
 	private void removeOptifineZoom() {
@@ -242,6 +251,10 @@ public class Glide {
 
 	public boolean isFirstLogin() {return !firstLoginFile.exists();}
 
+	public MusicManager getMusicManager() {
+		return musicManager;
+	}
+
 	public Update getUpdateInstance(){
 		return update;
 	}
@@ -256,4 +269,5 @@ public class Glide {
 
 	public BlacklistManager getBlacklistManager() { return blacklistManager; }
 	public RestrictedMod getRestrictedMod() { return restrictedMod; }
+	public RomanizationManager getRomanizationManager() { return romanizationManager; }
 }
