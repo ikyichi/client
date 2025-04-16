@@ -19,6 +19,7 @@ import com.wrapper.spotify.requests.data.player.*;
 import com.wrapper.spotify.requests.data.player.StartResumeUsersPlaybackRequest;
 import com.wrapper.spotify.requests.data.playlists.GetListOfCurrentUsersPlaylistsRequest;
 import com.wrapper.spotify.requests.data.search.simplified.SearchTracksRequest;
+import com.wrapper.spotify.requests.data.search.simplified.SearchPlaylistsRequest;
 import me.eldodebug.soar.Glide;
 import me.eldodebug.soar.logger.GlideLogger;
 import me.eldodebug.soar.management.file.FileManager;
@@ -38,7 +39,7 @@ public class MusicManager implements AutoCloseable {
     private static final URI REDIRECT_URI = SpotifyHttpManager.makeUri("http://localhost:8888/callback");
     private static final String TOKEN_FILE_NAME = "spotify_tokens.properties";
     private static final String CREDENTIALS_FILE_NAME = "spotify_credentials.properties";
-    private static final int SEARCH_LIMIT = 20;
+    private static final int SEARCH_LIMIT = 30;
     private static final int PLAYLIST_LIMIT = 50;
 
     private String clientId;
@@ -344,6 +345,39 @@ public class MusicManager implements AutoCloseable {
                         throw new CompletionException(e);
                     } finally {
                         searchCache.remove(query);
+                    }
+                }))
+        );
+    }
+
+    public CompletableFuture<List<PlaylistSimplified>> searchPlaylists(String query) {
+        return playlistCache.computeIfAbsent("search:" + query, q ->
+                throttleRequest("search_playlist", () -> CompletableFuture.supplyAsync(() -> {
+                    try {
+                        final SearchPlaylistsRequest request = spotifyApi.searchPlaylists(query)
+                                .limit(SEARCH_LIMIT)
+                                .build();
+                        List<PlaylistSimplified> playlists = Arrays.asList(request.execute().getItems());
+
+                        CompletableFuture.runAsync(() -> {
+                            for (int i = 0; i < playlists.size(); i += BATCH_SIZE) {
+                                int end = Math.min(i + BATCH_SIZE, playlists.size());
+                                List<PlaylistSimplified> batch = playlists.subList(i, end);
+                                batch.forEach(this::getPlaylistImageUrl);
+                                try {
+                                    Thread.sleep(THROTTLE_DELAY);
+                                } catch (InterruptedException e) {
+                                    Thread.currentThread().interrupt();
+                                }
+                            }
+                        });
+
+                        return playlists;
+                    } catch (Exception e) {
+                        GlideLogger.error("Playlist search failed", e);
+                        throw new CompletionException(e);
+                    } finally {
+                        playlistCache.remove("search:" + query);
                     }
                 }))
         );

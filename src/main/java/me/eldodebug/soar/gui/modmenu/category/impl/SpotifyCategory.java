@@ -59,6 +59,7 @@ public class SpotifyCategory extends Category implements MusicManager.TrackInfoC
     private ScheduledFuture<?> pendingSearch;
 
     private volatile List<Track> searchResults;
+    private volatile List<PlaylistSimplified> searchPlaylistResults;
     private volatile List<PlaylistSimplified> userPlaylists;
     private boolean openDownloader;
     private boolean showSetupScreen = false;
@@ -140,7 +141,13 @@ public class SpotifyCategory extends Category implements MusicManager.TrackInfoC
 
     private void fetchUserPlaylists() {
         Glide.getInstance().getMusicManager().getUserPlaylists()
-                .thenAccept(playlists -> this.userPlaylists = playlists)
+                .thenAccept(playlists -> {
+                    if (playlists != null) {
+                        // Reverse to show most recent playlists first
+                        java.util.Collections.reverse(playlists);
+                    }
+                    this.userPlaylists = playlists;
+                })
                 .exceptionally(ex -> {
                     GlideLogger.error("Failed to fetch user playlists: " + ex.getMessage());
                     return null;
@@ -287,16 +294,27 @@ public class SpotifyCategory extends Category implements MusicManager.TrackInfoC
     }
 
     private void drawSearchResults(NanoVGManager nvg, ColorPalette palette) {
-        if (searchResults == null) {
+        if (searchResults == null && searchPlaylistResults == null) {
             return;
         }
 
         float offsetY = 13;
-        for (Track track : searchResults) {
-            if (offsetY + 46 >= -scroll.getValue() && offsetY <= -scroll.getValue() + getHeight()) {
-                drawTrackEntry(nvg, palette, track, offsetY);
+        if (searchResults != null) {
+            for (Track track : searchResults) {
+                if (offsetY + 46 >= -scroll.getValue() && offsetY <= -scroll.getValue() + getHeight()) {
+                    drawTrackEntry(nvg, palette, track, offsetY);
+                }
+                offsetY += 56;
             }
-            offsetY += 56;
+        }
+        if (searchPlaylistResults != null) {
+            for (PlaylistSimplified playlist : searchPlaylistResults) {
+                if (playlist == null) continue;
+                if (offsetY + 46 >= -scroll.getValue() && offsetY <= -scroll.getValue() + getHeight()) {
+                    drawPlaylistEntry(nvg, palette, playlist, offsetY);
+                }
+                offsetY += 56;
+            }
         }
     }
 
@@ -343,12 +361,45 @@ public class SpotifyCategory extends Category implements MusicManager.TrackInfoC
         }
     }
 
+    private void drawPlaylistEntry(NanoVGManager nvg, ColorPalette palette, PlaylistSimplified playlist, float offsetY) {
+        nvg.drawRoundedRect(this.getX() + 15, this.getY() + offsetY, this.getWidth() - 30, 46, 8, palette.getBackgroundColor(ColorType.DARK));
+
+        String imageUrl = Glide.getInstance().getMusicManager().getPlaylistImageUrl(playlist);
+        if (imageUrl != null) {
+            File imageFile = new File(imageUrl);
+            if (imageFile.exists()) {
+                nvg.drawRoundedImage(imageFile, this.getX() + 20, this.getY() + offsetY + 5, 36, 36, 6);
+            } else {
+                drawPlaceholderImage(nvg, offsetY);
+            }
+        } else {
+            drawPlaceholderImage(nvg, offsetY);
+        }
+
+        String playlistName = playlist.getName() != null ? playlist.getName() : "Untitled Playlist";
+        nvg.drawText(nvg.getLimitText(playlistName, 11, Fonts.MEDIUM, 280), this.getX() + 63, this.getY() + offsetY + 9, palette.getFontColor(ColorType.DARK), 11, Fonts.MEDIUM);
+
+        String ownerName = "Unknown Artist";
+        if (playlist.getOwner() != null && playlist.getOwner().getDisplayName() != null) {
+            ownerName = playlist.getOwner().getDisplayName();
+        }
+
+        nvg.drawText(ownerName, this.getX() + 63, this.getY() + offsetY + 25, palette.getFontColor(ColorType.NORMAL), 9, Fonts.MEDIUM);
+
+        nvg.drawText(LegacyIcon.PLAY, this.getX() + this.getWidth() - 60, this.getY() + offsetY + 15, palette.getFontColor(ColorType.NORMAL), 16, Fonts.LEGACYICON);
+
+        if (DEBUG_HITBOXES) {
+            nvg.drawRect(this.getX() + 15, this.getY() + offsetY, this.getWidth() - 30, 46, DEBUG_COLOR);
+            nvg.drawRect(this.getX() + 20, this.getY() + offsetY + 5, 36, 36, DEBUG_COLOR);
+        }
+    }
+
     private void drawUserPlaylists(NanoVGManager nvg, ColorPalette palette) {
         if (userPlaylists == null) {
             return;
         }
 
-        float offsetY = 13 + (searchResults != null ? searchResults.size() * 56 : 0);
+        float offsetY = 13 + (searchResults != null ? searchResults.size() * 56 : 0) + (searchPlaylistResults != null ? searchPlaylistResults.size() * 56 : 0);
         for (PlaylistSimplified playlist : userPlaylists) {
             if (playlist == null) {
                 continue;
@@ -490,6 +541,7 @@ public class SpotifyCategory extends Category implements MusicManager.TrackInfoC
     private void scheduleSearch(String query) {
         if (query.isEmpty()) {
             searchResults = null;
+            searchPlaylistResults = null;
             return;
         }
 
@@ -500,12 +552,26 @@ public class SpotifyCategory extends Category implements MusicManager.TrackInfoC
         pendingSearch = searchDebouncer.schedule(() -> {
             if (isSearching.compareAndSet(false, true)) {
                 try {
-                    List<Track> results = Glide.getInstance().getMusicManager().searchTracks(query).join();
+                    MusicManager musicManager = Glide.getInstance().getMusicManager();
+                    CompletableFuture<List<Track>> tracksFuture = musicManager.searchTracks(query);
+                    CompletableFuture<List<PlaylistSimplified>> playlistsFuture = musicManager.searchPlaylists(query);
+
+                    List<Track> results = tracksFuture.join();
+                    List<PlaylistSimplified> playlists = playlistsFuture.join();
+
                     searchResults = results;
+                    searchPlaylistResults = playlists;
+
                     if (results != null) {
                         int visibleTracks = Math.min(results.size(), 5);
                         for (int i = 0; i < visibleTracks; i++) {
-                            Glide.getInstance().getMusicManager().getAlbumArtUrl(results.get(i));
+                            musicManager.getAlbumArtUrl(results.get(i));
+                        }
+                    }
+                    if (playlists != null) {
+                        int visiblePlaylists = Math.min(playlists.size(), 5);
+                        for (int i = 0; i < visiblePlaylists; i++) {
+                            musicManager.getPlaylistImageUrl(playlists.get(i));
                         }
                     }
                 } catch (Exception ex) {
@@ -938,23 +1004,34 @@ public class SpotifyCategory extends Category implements MusicManager.TrackInfoC
     }
 
     private void handleTrackClick(int mouseX, int mouseY) {
-        if (searchResults == null) {
-            return;
-        }
-
         float offsetY = 13 + scroll.getValue();
-        for (Track track : searchResults) {
-            if (MouseUtils.isInside(mouseX, mouseY, this.getX() + 15, this.getY() + offsetY, this.getWidth() - 30,
-                    46)) {
-                if (MouseUtils.isInside(mouseX, mouseY, this.getX() + this.getWidth() - 60, this.getY() + offsetY + 15,
-                        16, 16)) {
-                    addToQueue(track);
-                } else {
-                    Glide.getInstance().getMusicManager().play(track.getUri());
+        if (searchResults != null) {
+            for (Track track : searchResults) {
+                if (MouseUtils.isInside(mouseX, mouseY, this.getX() + 15, this.getY() + offsetY, this.getWidth() - 30, 46)) {
+                    if (MouseUtils.isInside(mouseX, mouseY, this.getX() + this.getWidth() - 60, this.getY() + offsetY + 15, 16, 16)) {
+                        addToQueue(track);
+                    } else {
+                        Glide.getInstance().getMusicManager().play(track.getUri());
+                    }
+                    return;
                 }
-                break;
+                offsetY += 56;
             }
-            offsetY += 56;
+        }
+        if (searchPlaylistResults != null) {
+            for (PlaylistSimplified playlist : searchPlaylistResults) {
+                if (playlist == null || playlist.getUri() == null) continue;
+                if (MouseUtils.isInside(mouseX, mouseY, this.getX() + 15, this.getY() + offsetY, this.getWidth() - 30, 46)) {
+                    try {
+                        Glide.getInstance().getMusicManager().playPlaylist(playlist.getUri());
+                    } catch (Exception e) {
+                        GlideLogger.error("Failed to play playlist: " + e.getMessage());
+                        Glide.getInstance().getNotificationManager().post(TranslateText.MUSIC, TranslateText.valueOf("Failed to play playlist"), NotificationType.ERROR);
+                    }
+                    return;
+                }
+                offsetY += 56;
+            }
         }
     }
 
@@ -967,7 +1044,7 @@ public class SpotifyCategory extends Category implements MusicManager.TrackInfoC
             return;
         }
 
-        float offsetY = 13 + (searchResults != null ? searchResults.size() * 56 : 0) + scroll.getValue();
+        float offsetY = 13 + (searchResults != null ? searchResults.size() * 56 : 0) + (searchPlaylistResults != null ? searchPlaylistResults.size() * 56 : 0) + scroll.getValue();
         for (PlaylistSimplified playlist : userPlaylists) {
             if (playlist == null || playlist.getUri() == null) {
                 continue;
@@ -989,15 +1066,9 @@ public class SpotifyCategory extends Category implements MusicManager.TrackInfoC
     private void addToQueue(Track track) {
         MusicManager musicManager = Glide.getInstance().getMusicManager();
         musicManager.addToQueue(track.getUri())
-                .thenRun(() -> Glide.getInstance().getNotificationManager().post(
-                        TranslateText.MUSIC,
-                        TranslateText.valueOf("Added to queue: " + track.getName()),
-                        NotificationType.SUCCESS))
+                .thenRun(() -> Glide.getInstance().getNotificationManager().post(TranslateText.MUSIC, TranslateText.valueOf("Added to queue: " + track.getName()), NotificationType.SUCCESS))
                 .exceptionally(ex -> {
-                    Glide.getInstance().getNotificationManager().post(
-                            TranslateText.MUSIC,
-                            TranslateText.valueOf("Failed to add to queue"),
-                            NotificationType.ERROR);
+                    Glide.getInstance().getNotificationManager().post(TranslateText.MUSIC, TranslateText.valueOf("Failed to add to queue"), NotificationType.ERROR);
                     return null;
                 });
     }
@@ -1099,7 +1170,10 @@ public class SpotifyCategory extends Category implements MusicManager.TrackInfoC
     }
 
     private void updateScroll() {
-        int totalResults = (searchResults != null ? searchResults.size() : 0) + (userPlaylists != null ? userPlaylists.size() : 0);
+        int totalResults = 0;
+        if (searchResults != null) totalResults += searchResults.size();
+        if (searchPlaylistResults != null) totalResults += searchPlaylistResults.size();
+        if (userPlaylists != null) totalResults += userPlaylists.size();
         scroll.setMaxScroll(totalResults * 56);
     }
 
