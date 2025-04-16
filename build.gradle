@@ -83,6 +83,17 @@ mixin {
     add sourceSets.main, "mixins.soar.refmap.json"
 }
 
+sourceSets {
+    main {
+        java {
+            srcDir 'src/main/java'
+        }
+        resources {
+            srcDir 'src/main/resources'
+        }
+    }
+}
+
 processResources {
     inputs.files "src/main/resources"
     outputs.dir "build/classes/main"

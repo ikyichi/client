@@ -236,14 +236,6 @@ public class SpotifyCategory extends Category implements MusicManager.TrackInfoC
                 centerX, this.getY() + 40,
                 palette.getFontColor(ColorType.DARK), 20, Fonts.MEDIUM);
 
-        String[] instructions = TranslateText.SPOTIFY_SETUP_INSTRUCTIONS.getText().split("\n");
-        float instructionY = this.getY() + 80;
-        for (String line : instructions) {
-            nvg.drawCenteredText(line, centerX, instructionY,
-                    palette.getFontColor(ColorType.NORMAL), 12, Fonts.MEDIUM);
-            instructionY += 20;
-        }
-
         nvg.drawText(TranslateText.SPOTIFY_CLIENT_ID.getText(),
                 centerX - 150, centerY - 10,
                 palette.getFontColor(ColorType.NORMAL), 12, Fonts.MEDIUM);
@@ -272,7 +264,7 @@ public class SpotifyCategory extends Category implements MusicManager.TrackInfoC
                 palette.getBackgroundColor(ColorType.DARK));
 
         nvg.drawCenteredText(TranslateText.SPOTIFY_TUTORIAL.getText(),
-                centerX - 80, tutorialButtonY + 15,
+                centerX - 80, tutorialButtonY + 11,
                 tutorialHovered ? palette.getFontColor(ColorType.DARK) : palette.getFontColor(ColorType.NORMAL),
                 11, Fonts.MEDIUM);
 
@@ -284,14 +276,13 @@ public class SpotifyCategory extends Category implements MusicManager.TrackInfoC
                 setupHovered ? accentColor.getInterpolateColor() : palette.getBackgroundColor(ColorType.DARK));
 
         nvg.drawCenteredText(TranslateText.SPOTIFY_SETUP_COMPLETE.getText(),
-                setupButtonX + 70, tutorialButtonY + 15,
+                setupButtonX + 70, tutorialButtonY + 11,
                 setupHovered ? Color.WHITE : palette.getFontColor(ColorType.NORMAL),
                 11, Fonts.MEDIUM);
 
         if (setupError) {
-            nvg.drawCenteredText(TranslateText.SPOTIFY_INVALID_CREDENTIALS.getText(),
-                    centerX, tutorialButtonY + 50,
-                    Color.RED, 12, Fonts.MEDIUM);
+            Glide.getInstance().getNotificationManager().post(TranslateText.MUSIC, TranslateText.SPOTIFY_INVALID_CREDENTIALS, NotificationType.ERROR);
+            setupError = false;
         }
     }
 
@@ -884,7 +875,7 @@ public class SpotifyCategory extends Category implements MusicManager.TrackInfoC
 
                 Glide.getInstance().getNotificationManager().post(
                         TranslateText.SPOTIFY_AUTH,
-                        TranslateText.valueOf("Credentials saved successfully. Please connect to Spotify."),
+                        TranslateText.CREDENTIALS_SAVED,
                         NotificationType.SUCCESS);
             } else {
                 setupError = true;
