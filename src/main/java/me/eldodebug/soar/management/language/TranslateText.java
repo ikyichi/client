@@ -164,7 +164,16 @@ public enum TranslateText {
 	SPOTIFY_TUTORIAL("text.spotify.tutorial"),
 	SPOTIFY_NEXT("text.spotify.next"),
 	SPOTIFY_INVALID_CREDENTIALS("text.spotify.invalid_credentials"),
-	SPOTIFY_SETUP_INSTRUCTIONS("text.spotify.setup_instructions"), CREDENTIALS_SAVED("text.spotify.credentials_saved");
+	SPOTIFY_SETUP_INSTRUCTIONS("text.spotify.setup_instructions"), CREDENTIALS_SAVED("text.spotify.credentials_saved"),
+	SPOTIFY_SEARCH_FAILED("text.spotify.search_failed"),
+	SPOTIFY_FAILED_TO_PLAY_PLAYLIST("text.spotify.failed_to_play_playlist"),
+	SPOTIFY_FAILED_TO_ADD_TO_QUEUE("text.spotify.failed_to_add_to_queue"),
+	SPOTIFY_ADDED_TO_QUEUE("text.spotify.added_to_queue"),
+	SPOTIFY_FAILED_TO_START_SERVER("text.spotify.failed_to_start_server"),
+	SPOTIFY_FAILED_TO_SAVE_CREDENTIALS("text.spotify.failed_to_save_credentials"),
+	SPOTIFY_FAILED_TO_SAVE_TOKENS("text.spotify.failed_to_save_tokens"),
+	SPOTIFY_PREMIUM_REQUIRED("text.spotify.premium_required"),
+	SPOTIFY_PLAYBACK_RESTRICTED("text.spotify.playback_restricted");
 
 	private String key, text;
 

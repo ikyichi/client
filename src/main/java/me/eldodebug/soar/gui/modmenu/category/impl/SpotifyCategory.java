@@ -576,7 +576,7 @@ public class SpotifyCategory extends Category implements MusicManager.TrackInfoC
                     }
                 } catch (Exception ex) {
                     GlideLogger.error("Search failed", ex);
-                    Glide.getInstance().getNotificationManager().post(TranslateText.MUSIC, TranslateText.valueOf("Failed to search"), NotificationType.ERROR);
+                    Glide.getInstance().getNotificationManager().post(TranslateText.MUSIC, TranslateText.SPOTIFY_SEARCH_FAILED, NotificationType.ERROR);
                 } finally {
                     isSearching.set(false);
                 }
@@ -1026,7 +1026,7 @@ public class SpotifyCategory extends Category implements MusicManager.TrackInfoC
                         Glide.getInstance().getMusicManager().playPlaylist(playlist.getUri());
                     } catch (Exception e) {
                         GlideLogger.error("Failed to play playlist: " + e.getMessage());
-                        Glide.getInstance().getNotificationManager().post(TranslateText.MUSIC, TranslateText.valueOf("Failed to play playlist"), NotificationType.ERROR);
+                        Glide.getInstance().getNotificationManager().post(TranslateText.MUSIC, TranslateText.SPOTIFY_FAILED_TO_PLAY_PLAYLIST, NotificationType.ERROR);
                     }
                     return;
                 }
@@ -1055,7 +1055,7 @@ public class SpotifyCategory extends Category implements MusicManager.TrackInfoC
                     musicManager.playPlaylist(playlist.getUri());
                 } catch (Exception e) {
                     GlideLogger.error("Failed to play playlist: " + e.getMessage());
-                    Glide.getInstance().getNotificationManager().post(TranslateText.MUSIC, TranslateText.valueOf("Failed to play playlist"), NotificationType.ERROR);
+                    Glide.getInstance().getNotificationManager().post(TranslateText.MUSIC, TranslateText.SPOTIFY_FAILED_TO_PLAY_PLAYLIST, NotificationType.ERROR);
                 }
                 break;
             }
@@ -1066,9 +1066,9 @@ public class SpotifyCategory extends Category implements MusicManager.TrackInfoC
     private void addToQueue(Track track) {
         MusicManager musicManager = Glide.getInstance().getMusicManager();
         musicManager.addToQueue(track.getUri())
-                .thenRun(() -> Glide.getInstance().getNotificationManager().post(TranslateText.MUSIC, TranslateText.valueOf("Added to queue: " + track.getName()), NotificationType.SUCCESS))
+                .thenRun(() -> Glide.getInstance().getNotificationManager().post(TranslateText.MUSIC, TranslateText.SPOTIFY_ADDED_TO_QUEUE, NotificationType.SUCCESS))
                 .exceptionally(ex -> {
-                    Glide.getInstance().getNotificationManager().post(TranslateText.MUSIC, TranslateText.valueOf("Failed to add to queue"), NotificationType.ERROR);
+                    Glide.getInstance().getNotificationManager().post(TranslateText.MUSIC, TranslateText.SPOTIFY_FAILED_TO_ADD_TO_QUEUE, NotificationType.ERROR);
                     return null;
                 });
     }

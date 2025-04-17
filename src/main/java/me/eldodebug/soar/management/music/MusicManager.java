@@ -185,7 +185,7 @@ public class MusicManager implements AutoCloseable {
                     startServer();
                 } catch (IOException e) {
                     GlideLogger.error("Failed to start local server for Spotify authentication", e);
-                    Glide.getInstance().getNotificationManager().post(TranslateText.SPOTIFY_AUTH, TranslateText.valueOf("Failed to start local server"), NotificationType.ERROR);
+                    Glide.getInstance().getNotificationManager().post(TranslateText.SPOTIFY_AUTH, TranslateText.SPOTIFY_FAIL_BROWSER, NotificationType.ERROR);
                 }
             }
 
@@ -195,7 +195,7 @@ public class MusicManager implements AutoCloseable {
             GlideLogger.info("Saved Spotify credentials");
         } catch (IOException e) {
             GlideLogger.error("Failed to save Spotify credentials", e);
-            Glide.getInstance().getNotificationManager().post(TranslateText.SPOTIFY_AUTH, TranslateText.valueOf("Failed to save credentials"), NotificationType.ERROR);
+            Glide.getInstance().getNotificationManager().post(TranslateText.SPOTIFY_AUTH, TranslateText.SPOTIFY_FAILED_TO_SAVE_CREDENTIALS, NotificationType.ERROR);
         }
     }
 
@@ -225,7 +225,7 @@ public class MusicManager implements AutoCloseable {
             props.store(out, "Spotify Tokens");
         } catch (IOException e) {
             GlideLogger.error("Failed to save tokens", e);
-            Glide.getInstance().getNotificationManager().post(TranslateText.SPOTIFY_AUTH, TranslateText.valueOf("Failed to save tokens"), NotificationType.ERROR);
+            Glide.getInstance().getNotificationManager().post(TranslateText.SPOTIFY_AUTH, TranslateText.SPOTIFY_FAILED_TO_SAVE_TOKENS, NotificationType.ERROR);
         }
     }
 
@@ -450,7 +450,7 @@ public class MusicManager implements AutoCloseable {
                         GlideLogger.warn("Play command restricted - likely due to Spotify Premium requirement or device limitations");
                         Glide.getInstance().getNotificationManager().post(
                                 TranslateText.SPOTIFY_PLAYBACK,
-                                TranslateText.valueOf("Playback control restricted - check Spotify Premium status or active device"),
+                                TranslateText.SPOTIFY_PLAYBACK_RESTRICTED,
                                 NotificationType.WARNING
                         );
 
@@ -500,7 +500,7 @@ public class MusicManager implements AutoCloseable {
                     GlideLogger.warn("Resume playback restricted - likely due to Spotify Premium requirement or device limitations");
                     Glide.getInstance().getNotificationManager().post(
                             TranslateText.SPOTIFY_PLAYBACK,
-                            TranslateText.valueOf("Playback control restricted - check Spotify Premium status or active device"),
+                            TranslateText.SPOTIFY_PREMIUM_REQUIRED,
                             NotificationType.WARNING
                     );
                     fetchCurrentPlaybackState();
@@ -611,9 +611,34 @@ public class MusicManager implements AutoCloseable {
     private void handleSpotifyException(String action, Exception e) {
         String errorMessage = "Failed to " + action + ": " + e.getMessage();
         GlideLogger.error(errorMessage, e);
+        
+        // Create a specific error message based on the action
+        TranslateText errorText;
+        switch (action) {
+            case "start playback":
+                errorText = TranslateText.SPOTIFY_PLAYBACK_START_FAILED;
+                break;
+            case "pause playback":
+                errorText = TranslateText.SPOTIFY_PLAYBACK_PAUSE_FAILED;
+                break;
+            case "resume playback":
+                errorText = TranslateText.SPOTIFY_PLAYBACK_RESUME_FAILED;
+                break;
+            case "set volume":
+                errorText = TranslateText.SPOTIFY_VOLUME_SET_FAILED;
+                break;
+            case "play playlist":
+                errorText = TranslateText.SPOTIFY_FAILED_TO_PLAY_PLAYLIST;
+                break;
+            default:
+                // For any other action use a generic error message
+                errorText = TranslateText.ERROR;
+                break;
+        }
+        
         Glide.getInstance().getNotificationManager().post(
                 TranslateText.SPOTIFY_PLAYBACK,
-                TranslateText.valueOf(errorMessage),
+                errorText,
                 NotificationType.ERROR
         );
     }
