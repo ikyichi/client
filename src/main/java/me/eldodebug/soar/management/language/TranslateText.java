@@ -162,7 +162,7 @@ public enum TranslateText {
 	SPOTIFY_CLIENT_ID("text.spotify.client_id"),
 	SPOTIFY_CLIENT_SECRET("text.spotify.client_secret"),
 	SPOTIFY_TUTORIAL("text.spotify.tutorial"),
-	SPOTIFY_SETUP_COMPLETE("text.spotify.setup_complete"),
+	SPOTIFY_NEXT("text.spotify.next"),
 	SPOTIFY_INVALID_CREDENTIALS("text.spotify.invalid_credentials"),
 	SPOTIFY_SETUP_INSTRUCTIONS("text.spotify.setup_instructions"), CREDENTIALS_SAVED("text.spotify.credentials_saved");
 
