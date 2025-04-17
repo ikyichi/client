@@ -36,7 +36,7 @@ import java.util.function.Supplier;
 
 public class MusicManager implements AutoCloseable {
 
-    private static final URI REDIRECT_URI = SpotifyHttpManager.makeUri("http://localhost:8888/callback");
+    private static final URI REDIRECT_URI = SpotifyHttpManager.makeUri("http://127.0.0.1:8888/callback");
     private static final String TOKEN_FILE_NAME = "spotify_tokens.properties";
     private static final String CREDENTIALS_FILE_NAME = "spotify_credentials.properties";
     private static final int SEARCH_LIMIT = 30;
