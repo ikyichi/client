@@ -1104,7 +1104,11 @@ public class SpotifyCategory extends Category implements MusicManager.TrackInfoC
             textBox.keyTyped(typedChar, keyCode);
         }
 
-        if (keyCode == Keyboard.KEY_SPACE && !showConnectButton) {
+        // Disable spacebar music control if search bar is focused
+        GuiModMenu parent = parentRef.get();
+        boolean searchBarFocused = parent != null && parent.getSearchBox() != null && parent.getSearchBox().isFocused();
+
+        if (keyCode == Keyboard.KEY_SPACE && !showConnectButton && !searchBarFocused) {
             MusicManager musicManager = Glide.getInstance().getMusicManager();
             if (musicManager.isPlaying()) {
                 musicManager.pause();
