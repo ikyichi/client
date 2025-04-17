@@ -112,7 +112,7 @@ public class MusicManager implements AutoCloseable {
                     startServer();
                 } catch (IOException e) {
                     GlideLogger.error("Failed to start local server for Spotify authentication", e);
-                    Glide.getInstance().getNotificationManager().post(TranslateText.SPOTIFY_AUTH, TranslateText.valueOf("Failed to start local server"), NotificationType.ERROR);
+                    Glide.getInstance().getNotificationManager().post(TranslateText.SPOTIFY_AUTH, TranslateText.SPOTIFY_FAIL_BROWSER, NotificationType.ERROR);
                 }
             }
             startPlaybackStateUpdater();
