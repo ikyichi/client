@@ -282,7 +282,7 @@ public class SpotifyCategory extends Category implements MusicManager.TrackInfoC
         nvg.drawRoundedRect(setupButtonX, tutorialButtonY, 140, 30, 5,
                 setupHovered ? accentColor.getInterpolateColor() : palette.getBackgroundColor(ColorType.DARK));
 
-        nvg.drawCenteredText(TranslateText.SPOTIFY_NEXT.getText(),
+        nvg.drawCenteredText(TranslateText.SPOTIFY_SETUP_COMPLETE.getText(),
                 setupButtonX + 70, tutorialButtonY + 11,
                 setupHovered ? Color.WHITE : palette.getFontColor(ColorType.NORMAL),
                 11, Fonts.MEDIUM);
