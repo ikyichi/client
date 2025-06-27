@@ -43,7 +43,7 @@ public class FileManager {
 			createVersionFile();
 
 		} catch (Exception e) {
-			GlideLogger.error("Something has gone very wrong while trying to create the glide folder which may result in crashes later", e);
+			GlideLogger.error("Something has gone very wrong while trying to create the Zenith folder which may result in crashes later", e);
 		}
 
 	}

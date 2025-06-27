@@ -38,20 +38,20 @@ public class DiscontinuedSoar8 extends MainMenuScene {
 		int acY = sr.getScaledHeight() / 2 - (acHeight / 2);
 
 		nvg.drawRoundedRect(acX, acY, acWidth, acHeight, 20, new Color(245, 249, 239));
-		nvg.drawCenteredText("Soar Client 8", acX + (acWidth / 2), acY + 12, new Color(24, 29, 23), 14, Fonts.SEMIBOLD);
+		nvg.drawCenteredText("Zenith Client 8", acX + (acWidth / 2), acY + 12, new Color(24, 29, 23), 14, Fonts.SEMIBOLD);
 
-		nvg.drawCenteredText("Soar Client V8 is finally ready for public use and because of this", acX + (acWidth / 2), acY + 35, new Color(66, 73, 64), 9, Fonts.REGULAR);
-		nvg.drawCenteredText("GlideClient is now discontinued so we ask that you get Soar 8.", acX + (acWidth / 2), acY + 45, new Color(66, 73, 64), 9, Fonts.REGULAR);
+		nvg.drawCenteredText("Zenith Client V8 is finally ready for public use and because of this", acX + (acWidth / 2), acY + 35, new Color(66, 73, 64), 9, Fonts.REGULAR);
+		nvg.drawCenteredText("Zenith is now discontinued so we ask that you get Soar 8.", acX + (acWidth / 2), acY + 45, new Color(66, 73, 64), 9, Fonts.REGULAR);
 
 		nvg.drawCenteredText("Soar 8 features many new modern features such as its material", acX + (acWidth / 2), acY + 60, new Color(66, 73, 64), 9, Fonts.REGULAR);
 		nvg.drawCenteredText("you design, better performance, 1.21 base and so much more to discover!", acX + (acWidth / 2), acY + 70, new Color(66, 73, 64), 9, Fonts.REGULAR);
 
-		nvg.drawCenteredText("Thank you for supporting Glide we appreciated it so much <3", acX + (acWidth / 2), acY + 90, new Color(66, 73, 64), 9, Fonts.REGULAR);
+		nvg.drawCenteredText("Thank you for supporting Zenith we appreciated it so much <3", acX + (acWidth / 2), acY + 90, new Color(66, 73, 64), 9, Fonts.REGULAR);
 
-		nvg.drawCenteredText("Anyway... It's time to stop Gliding and start Soaring!", acX + (acWidth / 2), acY + 135, new Color(66, 73, 64), 9, Fonts.REGULAR);
+		nvg.drawCenteredText("Anyway... It's time to stop Zenith and start Zenith!", acX + (acWidth / 2), acY + 135, new Color(66, 73, 64), 9, Fonts.REGULAR);
 
 		nvg.drawRoundedRect(acX + acWidth/2 + 5, acY + acHeight - 32, 90, 20, 10F, new Color(58, 105, 58));
-		nvg.drawCenteredText("Get Soar 8", acX + acWidth/2 + 50, acY + acHeight - 22 - (nvg.getTextHeight("Get Soar 8", 9.5F, Fonts.REGULAR)/2), Color.WHITE, 9.5F, Fonts.REGULAR);
+		nvg.drawCenteredText("Get Zenith 8", acX + acWidth/2 + 50, acY + acHeight - 22 - (nvg.getTextHeight("Get Soar 8", 9.5F, Fonts.REGULAR)/2), Color.WHITE, 9.5F, Fonts.REGULAR);
 
 		nvg.drawRoundedRect(acX + acWidth/2 - 95, acY + acHeight - 32, 90, 20, 10F, new Color(212, 231, 206));
 		nvg.drawCenteredText("Maybe Later", acX + acWidth/2 - 50, acY + acHeight - 22 - (nvg.getTextHeight("Maybe Later", 9.5F, Fonts.REGULAR)/2), new Color(59, 75, 57), 9.5F, Fonts.REGULAR);
@@ -73,7 +73,7 @@ public class DiscontinuedSoar8 extends MainMenuScene {
 			int acX = sr.getScaledWidth() / 2 - (acWidth / 2);
 			int acY = sr.getScaledHeight() / 2 - (acHeight / 2);
 			if (MouseUtils.isInside(mouseX, mouseY, acX + acWidth/2 + 5, acY + acHeight - 32, 90, 20)) {
-				try{ Desktop.getDesktop().browse(new URI("https://glideclient.github.io/soar8")); } catch (Exception ignored) {}
+				try{ Desktop.getDesktop().browse(new URI("https://Zenith.github.io/soar8")); } catch (Exception ignored) {}
 			}
 			if (MouseUtils.isInside(mouseX, mouseY, acX + acWidth/2 - 95, acY + acHeight - 32, 90, 20)) {
 				exitGui();

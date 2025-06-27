@@ -36,8 +36,8 @@ public class WelcomeMessageScene extends MainMenuScene {
 		ScaledResolution sr = new ScaledResolution(mc);
 		NanoVGManager nvg = Glide.getInstance().getNanoVGManager();
 		String hello = "Hello!";
-		String welcomeMessage = "Welcome to Glide Client";
-		String setupMessage = "An Updated Version of Soar Client";
+		String welcomeMessage = "Welcome to Zenith Client";
+		String setupMessage = "Thank you for using Zenith Client";
 		String setupMessage2 = "Time to setup Glide.";
 		
 		BlurUtils.drawBlurScreen(14);

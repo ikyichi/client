@@ -73,8 +73,8 @@ public class Glide {
 	private RestrictedMod restrictedMod;
 	
 	public Glide() {
-		name = "Glide";
-		version = "7.2";
+		name = "Zenith";
+		version = "1.9";
 		verIdentifier = 7201;
 	}
 	

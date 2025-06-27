@@ -136,7 +136,7 @@ public class GuiGlideMainMenu extends GuiScreen {
 		}
 
 		nvg.drawText(copyright, sr.getScaledWidth() - (nvg.getTextWidth(copyright, 9, Fonts.REGULAR)) - 4, sr.getScaledHeight() - 12, new Color(255, 255, 255), 9, Fonts.REGULAR);
-		nvg.drawText("Glide Client v" + instance.getVersion(), 4, sr.getScaledHeight() - 12, new Color(255, 255, 255), 9, Fonts.REGULAR);
+		nvg.drawText("Zenith Client Version " + instance.getVersion(), 4, sr.getScaledHeight() - 12, new Color(255, 255, 255), 9, Fonts.REGULAR);
 	}
 	
 	private void drawButtons(int mouseX, int mouseY, ScaledResolution sr, NanoVGManager nvg) {

@@ -1,0 +1,16 @@
+[21:53:14] [main/INFO]: Extra: []
+[21:53:14] [main/INFO]: Running with arguments: [--userProperties, {}, --assetsDir, C:/Users/lmopa/.gradle/caches/minecraft/assets, --assetIndex, 1.8, --accessToken{REDACTED}, --version, 1.8.9]
+[21:53:14] [main/INFO]: Loading tweak class name net.minecraft.launchwrapper.VanillaTweaker
+[21:53:14] [main/INFO]: Using primary tweak class name net.minecraft.launchwrapper.VanillaTweaker
+[21:53:14] [main/INFO]: Calling tweak class net.minecraft.launchwrapper.VanillaTweaker
+[21:53:14] [main/ERROR]: Unable to launch
+java.lang.NoSuchMethodException: net.minecraft.client.Minecraft.main([Ljava.lang.String;)
+	at java.lang.Class.getMethod(Class.java:1786) ~[?:1.8.0_452]
+	at net.minecraft.launchwrapper.Launch.launch(Launch.java:132) [launchwrapper-1.11.jar:?]
+	at net.minecraft.launchwrapper.Launch.main(Launch.java:28) [launchwrapper-1.11.jar:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_452]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_452]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_452]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_452]
+	at net.minecraftforge.gradle.GradleStartCommon.launch(GradleStartCommon.java:97) [start/:?]
+	at GradleStart.main(GradleStart.java:26) [start/:?]

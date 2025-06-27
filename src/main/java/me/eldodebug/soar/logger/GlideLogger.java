@@ -5,7 +5,7 @@ import org.apache.logging.log4j.Logger;
 
 public class GlideLogger {
 	
-    public static final Logger logger = LogManager.getLogger("Glide Client");
+    public static final Logger logger = LogManager.getLogger("Zenith Client");
     
     public static void info(String message) {
     	logger.info("[GC/INFO] " + message);

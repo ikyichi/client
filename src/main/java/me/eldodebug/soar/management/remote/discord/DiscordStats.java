@@ -8,7 +8,7 @@ import me.eldodebug.soar.utils.network.HttpUtils;
 
 /**
  * I know what people are like so il explain this class .
- *  This class checks the discord api to see how many members the glide server has
+ *  This class checks the discord api to see how many members the Zenith server has
  *  you can see this within the ui from the home screen in the mod menu
  */
 public class DiscordStats {

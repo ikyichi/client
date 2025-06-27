@@ -132,7 +132,7 @@ public class CosmeticsCategory extends Category {
 			if (capeCount == 0){
 				nvg.drawCenteredText("You have no custom capes.", getX()+(getWidth()/2), getY() + (getHeight()/2) - 14, palette.getFontColor(ColorType.DARK), 12, Fonts.SEMIBOLD);
 				nvg.drawCenteredText("You can click the folder button at the top to open the folder!", getX()+(getWidth()/2), getY() + (getHeight()/2), palette.getFontColor(ColorType.DARK), 9, Fonts.MEDIUM);
-				nvg.drawCenteredText("(Glide only supports capes that are PNG using Minecraft layout. You may need to restart Glide!)", getX()+(getWidth()/2), getY() + (getHeight()/2) + 12, palette.getFontColor(ColorType.NORMAL), 7, Fonts.REGULAR);
+				nvg.drawCenteredText("(Zenith only supports capes that are PNG using Minecraft layout. You may need to restart Zenith!)", getX()+(getWidth()/2), getY() + (getHeight()/2) + 12, palette.getFontColor(ColorType.NORMAL), 7, Fonts.REGULAR);
 			}
 			// you may need to reload the game
 		}
