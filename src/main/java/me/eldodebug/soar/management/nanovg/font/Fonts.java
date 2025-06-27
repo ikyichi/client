@@ -14,7 +14,7 @@ public class Fonts {
 	public static final Font REGULAR = new Font("regular", new ResourceLocation(PATH + "inter/Inter-Regular.ttf"));
 	public static final Font MEDIUM = new Font("medium", new ResourceLocation(PATH + "inter/Inter-Medium.ttf"));
 	public static final Font SEMIBOLD = new Font("semi-bold", new ResourceLocation(PATH + "inter/Inter-SemiBold.ttf"));
-	public static final Font LEGACYICON = new Font("icon", new ResourceLocation(PATH + "Icon.ttf"));
+	public static final Font LEGACYICON = new Font("icon", new ResourceLocation(PATH + "Icon.otf"));
 	public static final Font MOJANGLES = new Font("mojangles", new ResourceLocation(PATH + "mojangles.ttf"));
 	public static final Font UNIFONT = new Font("unifont", new ResourceLocation(PATH + "unifont/unifont.otf"));
 
