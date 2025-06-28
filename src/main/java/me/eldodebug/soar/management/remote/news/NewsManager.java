@@ -21,7 +21,7 @@ public class NewsManager {
 	
 	private void loadNews() {
 		
-		JsonObject jsonObject = HttpUtils.readJson("https://glideclient.github.io/data/news/news.json", null);
+		JsonObject jsonObject = HttpUtils.readJson("https://raw.githubusercontent.com/ikyichi/newszc/main/news.json\n", null);
 		
 		if(jsonObject != null) {
 			
